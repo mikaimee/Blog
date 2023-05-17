@@ -42,8 +42,8 @@ const createComment = asyncHandler(async(req, res) => {
 // route: PATCH /comments
 // access: Private
 const updateComment = asyncHandler(async(req, res) => {
-    const {id, user, post, body} = req.body
-    if (!id || !user || !post || !body) {
+    const {id, body} = req.body
+    if (!id || !body) {
         return res.status(400).json({message: 'All fields are required'})
     }
 
@@ -51,9 +51,6 @@ const updateComment = asyncHandler(async(req, res) => {
     if (!comment) {
         return res.status(400).json({message: 'Comment is not found'})
     }
-
-    comment.user = user
-    comment.post = post
     comment.body = body
 
     const updatedComment = await comment.save()
