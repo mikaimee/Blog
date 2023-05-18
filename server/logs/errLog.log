@@ -5,3 +5,5 @@
 20230516	17:10:42	f04b016f-82b1-498d-9b80-dad19bb5ab6d	Error: bulkSave expects an array of documents to be passed, received `undefined` instead	PATCH	/posts	undefined
 20230516	17:11:11	b1f01c01-bc35-48f5-9afa-e4a9b38a6321	TypeError: Post.save is not a function	PATCH	/posts	undefined
 20230516	17:30:45	5f183a7d-b712-463e-83ed-b8066f36e383	TypeError: Cannot read properties of null (reading 'title')	GET	/comments	undefined
+20230518	15:05:46	4ad916bf-8df9-4797-96a6-340f477c19b0	ReferenceError: loggingUser is not defined	POST	/auth/login	undefined
+20230518	15:21:01	b7b6aacd-1207-40ed-9c8d-b9895620aaec	Error: secretOrPrivateKey must have a value	POST	/auth/login	undefined

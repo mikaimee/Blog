@@ -1,24 +1,24 @@
-const Auth = require('../models/User')
-const asyncHandler = require('express-async-handler')
+const User = require('../models/User')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const asyncHandler = require('express-async-handler')
+const SECRET_AT = process.env.ACCESS_TOKEN_SECRET
+const SECRET_RT = process.env.REFRESH_TOKEN_SECRET
 
 // LOGIN
-// route: POST /login
+// route: POST /auth/login
 // access: Public
-const login = asyncHandler(async (res, res) => {
+const login = asyncHandler(async (req, res) => {
     const {username, password} = req.body
 
     if (!username || !password) {
-        return res.status(400).json({message: 'All fields are required'})
+        return res.status(400).json({ message: 'All fields are required' })
     }
 
     const loggingUser = await User.findOne({username}).exec()
-    if(!loggingUser) {
-        return res.status(401).json({message: 'Unauthorized'})
-    }
 
-    const matchPassword = await bcrypt.compare(password, loggingUser.password)
-    if (!matchPassword) return res.status(401).json({message: 'Password does not match'})
+    const match = await bcrypt.compare(password, loggingUser.password)
+    if (!match) return res.status(401).json({ message: 'Unauthorized' })
 
     const accessToken = jwt.sign(
         {
@@ -27,13 +27,14 @@ const login = asyncHandler(async (res, res) => {
                 "roles": loggingUser.roles
             }
         },
-        process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: '30m'}
+        SECRET_AT,
+        { expiresIn: '15m' }
     )
+
 
     const refreshToken = jwt.sign(
         {"username": loggingUser.username},
-        process.env.REFRESH_TOKEN_SECRET,
+        SECRET_RT,
         {expiresIn: '1d'}
     )
 
@@ -42,60 +43,53 @@ const login = asyncHandler(async (res, res) => {
         secure: true,
         sameSite: 'None',
         maxAge: 7 * 24 * 60 * 60 * 1000
-    })
+    }) 
 
-    res.json({accessToken})
+    res.json({accessToken, message: 'You are logged in!'},)
 })
 
 // REFRESH
-// route: GET /refresh
+// route: GET /auth/login
 // access Public
 const refresh = (req, res) => {
     const cookies = req.cookies
-    if (!cookies?.jwt) return res.status(401).json({message: 'Unauthorized'})
-
+    if (!cookies?.jwt) return res.status(401).json({ message: 'Unauthorized' })
     const refreshToken = cookies.jwt
 
     jwt.verify(
         refreshToken,
-        process.env.REFRESH_TOKEN_SECRET,
-        asyncHandler(async(err, decoded) => {
-            if (err) return res.status(403).json({message: 'Forbidden'})
+        SECRET_RT,
+        asyncHandler(async (err, decoded) => {
+            if (err) return res.status(403).json({ message: 'Forbidden'})
 
-            const loggingUser = await User.findOne({username: decoded.username}).exec()
-            if(!loggingUser) return res.status(401).json({message: 'Unauthorized'})
+            const logginUser = await User.findOne({ username: decoded.username }).exec()
+
+            if (!logginUser) return res.status(401).json({ message: 'Unauthorized' })
 
             const accessToken = jwt.sign(
                 {
                     "UserInfo": {
-                        "username": loggingUser.username,
-                        "roles": loggingUser.roles
+                        "username": logginUser.username,
+                        "roles": logginUser.roles
                     }
                 },
-                process.env.ACCESS_TOKEN_SECRET,
-                { expiresIn: '30m'}
+                SECRET_AT,
+                {expiresIn: '30m'}
             )
-
-            res.json({accessToken})
+            res.json({ accessToken, message: 'Token has been refreshed'})
         })
     )
 }
 
+
 // LOGOUT
-// route: POST /logout
+// route: POST /auth/login
 // access: Public
 const logout = (req, res) => {
     const cookies = req.cookies
-    if (!cookies?.jwt) return res.sendStatus(204)
-    res.clearCookie (
-        'jwt', 
-        {
-            httpOnly: true, 
-            sameSite: 'None',
-            secure: true
-        }
-    )
-    res.json({message: 'Cookie cleared and successfully logged out'})
+    if (!cookies?.jwt) return res.sendStatus(204)  // No content
+    res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: true })
+    res.json({message: 'Cookie cleared and you have logged out successfully'})
 }
 
 module.exports = {

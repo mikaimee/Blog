@@ -25,6 +25,7 @@ app.use('/', express.static(path.join(__dirname, '/public')))
 
 //ROUTES
 app.use('/', require('./routes/root'))
+app.use('/auth', require('./routes/authRoute'))
 app.use('/users', require('./routes/userRoute'))
 app.use('/posts', require('./routes/postRoute'))
 app.use('/comments', require('./routes/commentRoute'))
@@ -34,9 +35,11 @@ app.all('*', (req, res) => {
     res.status(404)
     if (req.accepts('html')) {
         res.sendFile(path.join(__dirname, 'public', '404.html'))
-    } else if (req.accepts('json')) {
+    } 
+    else if (req.accepts('json')) {
         res.json({ message: '404 Not Found' })
-    } else {
+    } 
+    else {
         res.type('txt').send('404 Not Found')
     }
 })
