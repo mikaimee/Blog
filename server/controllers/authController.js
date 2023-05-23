@@ -24,7 +24,10 @@ const login = asyncHandler(async (req, res) => {
         {
             "UserInfo": {
                 "username": loggingUser.username,
-                "roles": loggingUser.roles
+                "roles": loggingUser.roles,
+                "profilePic": loggingUser.profilePic,
+                "desc": loggingUser.desc,
+                "email": loggingUser.email
             }
         },
         SECRET_AT,
@@ -62,15 +65,18 @@ const refresh = (req, res) => {
         asyncHandler(async (err, decoded) => {
             if (err) return res.status(403).json({ message: 'Forbidden'})
 
-            const logginUser = await User.findOne({ username: decoded.username }).exec()
+            const loggingUser = await User.findOne({ username: decoded.username }).exec()
 
-            if (!logginUser) return res.status(401).json({ message: 'Unauthorized' })
+            if (!loggingUser) return res.status(401).json({ message: 'Unauthorized' })
 
             const accessToken = jwt.sign(
                 {
                     "UserInfo": {
-                        "username": logginUser.username,
-                        "roles": logginUser.roles
+                        "username": loggingUser.username,
+                        "roles": loggingUser.roles,
+                        "profilePic": loggingUser.profilePic,
+                        "desc": loggingUser.desc,
+                        "email": loggingUser.email
                     }
                 },
                 SECRET_AT,
