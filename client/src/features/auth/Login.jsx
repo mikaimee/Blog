@@ -1,14 +1,12 @@
 import {useRef, useState, useEffect, useContext} from 'react'
-import AuthContext from '../../application/context/authContext'
-import axios from 'axios'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
 
 const LOGIN_URL = 'http://localhost:8000/auth/login'
 
 
 const Login = () => {
-
-    const {setAuth} = useContext(AuthContext)
+    
     const userRef = useRef()
     const errRef = useRef()
 
@@ -38,7 +36,7 @@ const Login = () => {
             const accessToken = res?.data?.accessToken
             const roles = res?.data?.roles
             // setAuth({username, password, roles, accessToken})
-            localStorage.setItem('userInfo', JSON.stringify(res?.data))
+            localStorage.setItem('UserInfo', JSON.stringify(res?.data))
             setUsername('')
             setPassword('')
             setSuccess(true)
@@ -96,7 +94,7 @@ const Login = () => {
                         <button>Sign In</button>
                     </form>
                     <p>
-                        Need an Account <br/>
+                        Need an Account? <br/>
                         <Link to="/register">Sign Up</Link>
                     </p>
                 </section>

@@ -51,8 +51,9 @@ const Register = () => {
                 headers: {'Content-Type': 'application/json'},
                 withCredentials: true
             })
+            localStorage.setItem("UserInfo", JSON.stringify(res))
             console.log(res?.data)
-            console.log(JSON.stringify(res))
+            console.log("data:", JSON.stringify(res))
             setSuccess(true)
             setUsername('')
             setPassword('')
