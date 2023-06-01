@@ -22,7 +22,11 @@ const login = asyncHandler(async (req, res) => {
 
     const accessToken = jwt.sign(
         {
+            // "username": loggingUser.username,
+            // "id": loggingUser._id,
+            // "roles": loggingUser.roles
             "UserInfo": {
+                "id": loggingUser._id,
                 "username": loggingUser.username,
                 "roles": loggingUser.roles,
                 "profilePic": loggingUser.profilePic,
@@ -36,7 +40,10 @@ const login = asyncHandler(async (req, res) => {
 
 
     const refreshToken = jwt.sign(
-        {"username": loggingUser.username},
+        {
+            "username": loggingUser.username,
+            "id": loggingUser._id
+        },
         SECRET_RT,
         {expiresIn: '1d'}
     )
@@ -71,7 +78,11 @@ const refresh = (req, res) => {
 
             const accessToken = jwt.sign(
                 {
+                    // "username": loggingUser.username,
+                    // "id": loggingUser._id,
+                    // "roles": loggingUser.roles
                     "UserInfo": {
+                        "id": loggingUser._id,
                         "username": loggingUser.username,
                         "roles": loggingUser.roles,
                         "profilePic": loggingUser.profilePic,
@@ -93,7 +104,10 @@ const refresh = (req, res) => {
 // access: Public
 const logout = (req, res) => {
     const cookies = req.cookies
-    if (!cookies?.jwt) return res.sendStatus(204)  // No content
+    if (!cookies?.jwt) return res.sendStatus(204)
+    const refreshToken = cookies.jwt
+
+    const loggedUser = await User.findOne({refreshToken})
     res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: true })
     res.json({message: 'Cookie cleared and you have logged out successfully'})
 }

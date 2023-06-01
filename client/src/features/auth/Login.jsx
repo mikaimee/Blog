@@ -1,12 +1,19 @@
-import {useRef, useState, useEffect, useContext} from 'react'
-import { Link } from 'react-router-dom'
+import {useRef, useState, useEffect} from 'react'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import axios from 'axios'
+import useAuth from '../../hooks/useAuth'
 
 const LOGIN_URL = 'http://localhost:8000/auth/login'
 
 
 const Login = () => {
-    
+
+    const {setAuth} = useAuth()
+
+    // const navigate = useNavigate()
+    // const location = useLocation()
+    // const from = location.state?.from?.pathname || "/"
+
     const userRef = useRef()
     const errRef = useRef()
 
@@ -25,6 +32,7 @@ const Login = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault()
+
         try{
             const res = await axios.post(LOGIN_URL, JSON.stringify({username, password}),
             {
@@ -35,11 +43,13 @@ const Login = () => {
             
             const accessToken = res?.data?.accessToken
             const roles = res?.data?.roles
-            // setAuth({username, password, roles, accessToken})
-            localStorage.setItem('UserInfo', JSON.stringify(res?.data))
+            const id = res?.data?._id
+            setAuth({username, password, roles, accessToken, id})
+            // localStorage.setItem('UserInfo', JSON.stringify(res?.data))
             setUsername('')
             setPassword('')
             setSuccess(true)
+            // navigate(from, {replace: true})
         }
         catch (err) {
             if (!err?.res) {

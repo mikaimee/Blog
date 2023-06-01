@@ -1,10 +1,10 @@
 import axios from 'axios'
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const CREATEPOST_URL = 'http://localhost:8000/posts'
 
-const CreatePost = ({}) => {
+const CreatePost = () => {
 
     const navigate = useNavigate()
 
@@ -12,7 +12,7 @@ const CreatePost = ({}) => {
     const [summary, setSummary] = useState('')
     const [body, setBody] = useState('')
     const [pictures, setPictures] = useState('')
-    // const [user, setUser] = useState()
+    // const {user} = useContext(AuthContext)
     const [errorMessage, setErrorMessage] = useState('')
     const [success, setSuccess] = useState(false)
 
@@ -30,6 +30,7 @@ const CreatePost = ({}) => {
         try {
             const res = await axios.post(CREATEPOST_URL, JSON.stringify(
                 {
+                    // user,
                     title,
                     summary,
                     body,
