@@ -16,12 +16,12 @@ const useRefreshToken = () => {
             return {
                 ...prev,
                 roles: res.data.roles,
-                accessToken: res.data.accessToken,
-                id: res.data._id
+                accessToken: res.data.accessToken
             }
         })
-        return refresh
+        return res.data.accessToken
     }
+    return refresh
 }
 
 export default useRefreshToken

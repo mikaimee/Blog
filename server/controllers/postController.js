@@ -18,13 +18,26 @@ const getAllPosts = asyncHandler(async(req, res) => {
 // GET POST WITH USER
 // route: GET /post/postwithUser
 // access: Public
-const getNotesWithUser = asyncHandler(async (req,res) => {
+const getPostsWithUser = asyncHandler(async (req,res) => {
     const posts = await Post.find().lean()
     const postsWithUser = await Promise.all(posts.map(async(post) => {
         const user = await User.findById(post.user).lean().exec()
         return {...post, username: user.username}
     }))
 })
+
+// GET ONE POST
+// route: GET /post/:id
+// access: Public
+const getOnePost = async (req, res) => {
+    if (!req?.params?.id) return res.status(400).json({'message': 'Post ID required'})
+
+    const post = await Post.findOne({_id: req.params.id}).exec()
+    if (!post) {
+        return res.status(204).json({'message': 'No post matches with provided ID'})
+    }
+    res.json(post)
+}
 
 
 
@@ -90,8 +103,9 @@ const deletePost = asyncHandler(async (req, res) => {
 
 module.exports = {
     getAllPosts,
-    getNotesWithUser,
+    getPostsWithUser,
+    getOnePost,
     createPost,
     updatePost,
-    deletePost
+    deletePost,
 }

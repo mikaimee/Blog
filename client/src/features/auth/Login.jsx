@@ -1,4 +1,5 @@
-import {useRef, useState, useEffect} from 'react'
+import {useRef, useState, useEffect, useContext} from 'react'
+import AuthContext from '../../context/AuthProvider'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import axios from 'axios'
 import useAuth from '../../hooks/useAuth'
@@ -8,7 +9,7 @@ const LOGIN_URL = 'http://localhost:8000/auth/login'
 
 const Login = () => {
 
-    const {setAuth} = useAuth()
+    const {setAuth} = useContext(AuthContext)
 
     // const navigate = useNavigate()
     // const location = useLocation()
@@ -43,8 +44,7 @@ const Login = () => {
             
             const accessToken = res?.data?.accessToken
             const roles = res?.data?.roles
-            const id = res?.data?._id
-            setAuth({username, password, roles, accessToken, id})
+            setAuth({username, password, roles, accessToken})
             // localStorage.setItem('UserInfo', JSON.stringify(res?.data))
             setUsername('')
             setPassword('')
@@ -79,10 +79,12 @@ const Login = () => {
                 </section>
             ) : (
                 <section>
-                    <p ref={errRef}>{errorMessage}</p>
+                    <p ref={errRef} className={errorMessage ? "errMsg" : "offscreen"} aria-live='assertive'>{errorMessage}</p>
                     <h1>Sign in</h1>
                     <form onSubmit={handleLogin}>
-                        <label htmlFor='username'>Username: </label>
+                        <label htmlFor='username'>
+                            Username: 
+                        </label>
                         <input
                             type='text'
                             id='username'
@@ -95,7 +97,7 @@ const Login = () => {
 
                         <label htmlFor='password'>Password: </label>
                         <input
-                            type='text'
+                            type='password'
                             id='password'
                             onChange={(e) => setPassword(e.target.value)}
                             value={password}

@@ -1,4 +1,4 @@
-import axios from axios
+import axios from 'axios'
 import useAuth from './useAuth'
 
 const LOGOUT_URL = 'http://localhost:8000/auth/logout'

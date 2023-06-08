@@ -11,7 +11,6 @@ const Register = () => {
     const errRef = useRef()
 
     const [username, setUsername] = useState('')
-    const [validUsername, setValidUsername] = useState(false)
     const [usernameFocus, setUsernameFocus] = useState(false)
 
     const [password, setPassword] = useState('')
@@ -31,6 +30,7 @@ const Register = () => {
 
     useEffect(() => {
         setValidPassword(PASSWORD_VALID.test(password))
+        console.log(password)
         setValidMatch(password === match)
     }, [password, match])
 
@@ -51,8 +51,8 @@ const Register = () => {
                 headers: {'Content-Type': 'application/json'},
                 withCredentials: true
             })
-            localStorage.setItem("UserInfo", JSON.stringify(res))
             console.log(res?.data)
+            console.log(res?.accessToken)
             console.log("data:", JSON.stringify(res))
             setSuccess(true)
             setUsername('')
@@ -63,7 +63,7 @@ const Register = () => {
             if(!err?.res) {
                 setErrorMessage('No server response')
             }
-            else if (err.res?.status === 409) {
+            else if (err?.res?.status === 409) {
                 setErrorMessage('Username Taken')
             }
             else {
@@ -85,41 +85,52 @@ const Register = () => {
                 </section>
             ) : (
                 <section>
-                    <p ref={errRef}>{errorMessage}</p>
+                    <p ref={errRef} className={errorMessage ? "errMsg": "offscreen"} aria-live="assertive">{errorMessage}</p>
                     <h1>Register</h1>
                     <form onSubmit={handleRegister}>
-                        <label htmlFor="username">Username: </label>
+                        <label htmlFor="username">
+                            Username: 
+                        </label>
                         <input
                             type="text"
                             id="username"
-                            ref={userRef}
-                            autoComplete="off"
-                            onChange={(e) => setUsername(e.target.value)}
+                            ref={userRef}  // set focus on the input
+                            autoComplete="off"  // no suggestions
+                            onChange={(e) => setUsername(e.target.value)}  // ties the input to state
                             value={username}
                             required
                             onFocus={() => setUsernameFocus(true)}
                             onBlur={() => setUsernameFocus(false)}
                         />
 
-                        <label htmlFor="password">Password: </label>
+                        <label htmlFor="password">
+                            Password:
+                        </label>
                         <input
-                            type="text"
+                            type="password"
                             id="password"
                             onChange={(e) => setPassword(e.target.value)}
                             value={password}
                             required
+                            aria-invalid = {validPassword ? "false" : "true"}
+                            aria-describedby="passwordNote"
                             onFocus={() => setPasswordFocus(true)}
                             onBlur={() => setPasswordFocus(false)}
                         />
-                        <p id="passwordNote">
+                        <p id="passwordNote" className={passwordFocus && !validPassword ? "instructions" : "offscreen"}>
                             8 to 24 characters. <br/>
                             Must include uppercase and lowercase letters, a number and a special character. <br/>
-                            Allowed special characters: !, @, #, $, %
+                            Allowed special characters: 
+                            <span aria-label="exclamation mark">!</span>
+                            <span aria-label="at symbol">@</span>
+                            <span aria-label="hashtag">#</span>
+                            <span aria-label="dollar sign">$</span>
+                            <span aria-label="percent">%</span>
                         </p>
 
                         <label htmlFor="match">Confirm Password: </label>
                         <input
-                            type="text"
+                            type="password"
                             id="match"
                             onChange={(e) => setMatch(e.target.value)}
                             value={match}
@@ -127,11 +138,11 @@ const Register = () => {
                             onFocus={() => setMatchFocus(true)}
                             onBlur={() => setMatchFocus(false)}
                         />
-                        <p id="passwordNote">
+                        <p id="passwordNote" className={matchFocus && !validMatch ? "instructions" : "offscreen"}>
                             Must match with password
                         </p>
 
-                        <button disabled={!validPassword || !validMatch ? true: false}>Sign Up</button>
+                        <button disabled={!validPassword || !validMatch ? true : false}>Sign Up</button>
                     </form>
                     <p>
                         Already registered?<br/>

@@ -12,7 +12,7 @@ const CreatePost = () => {
     const [summary, setSummary] = useState('')
     const [body, setBody] = useState('')
     const [pictures, setPictures] = useState('')
-    // const {user} = useContext(AuthContext)
+    // const {auth} = useContext(AuthProvider)
     const [errorMessage, setErrorMessage] = useState('')
     const [success, setSuccess] = useState(false)
 
@@ -30,7 +30,7 @@ const CreatePost = () => {
         try {
             const res = await axios.post(CREATEPOST_URL, JSON.stringify(
                 {
-                    // user,
+                    // user: auth.username,
                     title,
                     summary,
                     body,

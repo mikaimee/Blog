@@ -26,14 +26,13 @@ function App() {
         <Route path="login" element={<Login/>} />
         <Route path="unauthorized" element={<Unauthorized/>} />
 
-        <Route element={<PersistLogin/>}>
-          {/* Display All Users (Admin)*/}
-          <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
-            <Route path="users/all" element={<AllUsers/>} />
-          </Route>
-        </Route>
+        <Route path="/users/all" element={<AllUsers/>} />
 
-        <Route path="users">
+
+        <Route path="/post/:postId">
+          <Post />
+        </Route>
+        {/* <Route path="users"> */}
           {/* Public */}
           {/* Display Logged User Info */}
           {/* <Route path="/" element={<Profile/>} /> */}
@@ -42,11 +41,11 @@ function App() {
           {/* Edit User (Blogger + Admin) */}
           {/* <Route path="/edit" element /> */}
           {/* Display All Users (Admin)*/}
-        </Route>
+        {/* </Route> */}
 
         <Route path="posts">
           <Route index element ={<PostList/>} />
-          <Route path="" element={<Post/>} />
+          <Route path=":id" element={<Post/>} />
           <Route path="new" element={<CreatePost/>} />
 
           {/* Private */}

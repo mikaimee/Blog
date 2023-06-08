@@ -7,3 +7,8 @@
 20230516	17:30:45	5f183a7d-b712-463e-83ed-b8066f36e383	TypeError: Cannot read properties of null (reading 'title')	GET	/comments	undefined
 20230518	15:05:46	4ad916bf-8df9-4797-96a6-340f477c19b0	ReferenceError: loggingUser is not defined	POST	/auth/login	undefined
 20230518	15:21:01	b7b6aacd-1207-40ed-9c8d-b9895620aaec	Error: secretOrPrivateKey must have a value	POST	/auth/login	undefined
+20230601	11:49:27	ef48aaf9-12d9-4a8d-aa2f-fcf9e684d781	TypeError: Cannot read properties of undefined (reading 'filter')	POST	/auth/login	http://localhost:3000
+20230601	11:53:24	e82ad70e-3c00-4762-935d-df1a0593e5fa	TypeError: Cannot read properties of undefined (reading 'filter')	POST	/auth/login	http://localhost:3000
+20230606	14:51:48	cb7c1053-715a-4448-be99-ab2d6b822ac6	ReferenceError: id is not defined	POST	/auth/login	http://localhost:3000
+20230606	14:52:36	a5c2face-eb5a-431a-9c1c-7944a4218135	ReferenceError: id is not defined	POST	/auth/login	http://localhost:3000
+20230606	14:53:50	c9c5d9fe-6eb3-49b9-b59f-d737d9986ba5	ReferenceError: id is not defined	POST	/auth/login	http://localhost:3000
