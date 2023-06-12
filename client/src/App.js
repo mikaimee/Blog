@@ -29,9 +29,8 @@ function App() {
         <Route path="/users/all" element={<AllUsers/>} />
 
 
-        <Route path="/post/:postId">
-          <Post />
-        </Route>
+        <Route path="/post/:postId" element={<Post/>}>
+      </Route>
         {/* <Route path="users"> */}
           {/* Public */}
           {/* Display Logged User Info */}
@@ -45,7 +44,6 @@ function App() {
 
         <Route path="posts">
           <Route index element ={<PostList/>} />
-          <Route path=":id" element={<Post/>} />
           <Route path="new" element={<CreatePost/>} />
 
           {/* Private */}

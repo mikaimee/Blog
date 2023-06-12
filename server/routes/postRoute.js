@@ -12,3 +12,5 @@ router.route('/:id')
     .get(postsController.getOnePost)
 
 module.exports = router
+
+// fix 
