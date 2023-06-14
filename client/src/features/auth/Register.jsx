@@ -95,7 +95,7 @@ const Register = () => {
                             type="text"
                             id="username"
                             ref={userRef}  // set focus on the input
-                            autoComplete="off"  // no suggestions
+                            autoComplete="off" 
                             onChange={(e) => setUsername(e.target.value)}  // ties the input to state
                             value={username}
                             required
